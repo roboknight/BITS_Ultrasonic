@@ -24,7 +24,7 @@ class RangeFinder {
     unsigned long pingRange(void);
     unsigned long pingRange(unsigned long to);
     float distanceInMillimeters(void);
-    float filterRangeMillimeters(void);
+    void filterRangeMillimeters(void);
     private:
     int _triggerPin;
     int _echoPin;

@@ -40,8 +40,14 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   //range = findRange();
-  range = rf->filterRangeMillimeters();
-  debugPrint(0, "Range check => ", range);
-  delay(25);
-  
+  rf->filterRangeMillimeters();
+  range = rf->distanceInMillimeters();
+  if(range < 100.0) {
+    debugPrint(0, "Too close =>", range);
+  }
+  if(range > 100.0 && range < 500.0) {
+    debugPrint(0, "    close =>", range);
+  }
+  if(range > 500.0)
+    debugPrint(0, "      far => ", range);
 }

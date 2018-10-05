@@ -71,19 +71,29 @@ float RangeFinder::distanceInMillimeters()
   return (float)(RangeFinder::_pingTime * 0.172);
 }
 
-float RangeFinder::filterRangeMillimeters(void) {
-  float lrange,s1,s2,s3;
+void RangeFinder::filterRangeMillimeters(void) {
+  unsigned long lrange,s1,s2,s3;
 
     s1 = RangeFinder::pingRange(50000);
-    delay(100);
+    delay(50);
     s2 = RangeFinder::pingRange(50000);
-    delay(100);
+    delay(50);
     s3 = RangeFinder::pingRange(50000);
 
-    if(s1 == s2 && s1 == 999999.0) return 999999.0;
-    if(s1 == s3 && s1 == 999999.0) return 999999.0;
-    if(s2 == s3 && s2 == 999999.0) return 999999.0;
-    lrange = s2;
+    lrange = 999999.0;
+    if(s1 == s2 || s1 == s3) 
+       lrange = s1;
+    if(s2 == s3) 
+      lrange = s2;
 
-    return lrange;
+    if(s1 != s2 && s1 != s3 && s2 != s3) {
+       if(s1 < s2 && s2 < s3) lrange = s2;
+       if(s3 < s2 && s2 < s1) lrange = s2;
+       if(s2 < s1 && s1 < s3) lrange = s1;
+       if(s3 < s1 && s1 < s2) lrange = s1;
+       if(s2 < s3 && s3 < s1) lrange = s3;
+       if(s1 < s3 && s3 < s2) lrange = s3;
+    }
+
+    RangeFinder::_pingTime = lrange;
 }
